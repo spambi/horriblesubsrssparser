@@ -1,0 +1,7 @@
+* Point of this
+    For automatic downloading of magnet links from horriblesubs.info automatically
+* WIP
+* TODO
+    - Auto downwload through transmission
+    - Sort through users specifications 
+    
