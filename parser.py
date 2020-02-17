@@ -1,57 +1,59 @@
+# A parser for horriblesubs.info and other torrent magnet link based rss feeds
+
 import os
 import feedparser
-#import ih2torrent
+
 horriblesubsrss720 = "http://www.horriblesubs.info/rss.php?res=720"
 
 # List for anime currently watching, might change to a dic
-animeWatching = ['Arifureta Shokugyou de Sekai Saikyou']
+animeWatching = ['[HorribleSubs] Boku no Hero Academia - 81 [720p].mkv']
+
+
 magnetLinks = []
 
 d = feedparser.parse(horriblesubsrss720)
 urls = []
 
-# Prints the length of the urls
-#  Print len(d.entries)
+
+def removeTags(rssFeed):
+    """Will remove tag from titles"""
+    shows = []
+    # Finds titles in RSS
+    for i in range(0, len(rssFeed.entries[-1].title)):
+        shows.append(rssFeed.entries[i].title)
+
+    # Removes HS tags
+    for i in range(0, len(shows)):
+        # 15 is magic number for splitting HS tags
+        # print(shows[i]) prints original
+        # print(shows[i][0:15]) prints without HS tag
+        shows[i] = shows[i][15:-4]  # prints without .mkv at end
+        # print(shows[i]) prints edited
+
+    return shows
 
 
-# Finds all magnet links and appends them to array
-for i in range(0, len(d.entries) - 1):
-    urls.append(d.entries[i].title)
-    urls.append(d.entries[i + 1].link)
+def findLinks(rssFeed):
+    links = []
 
-print(urls[0])
+    # Finds links in RSS
+    for i in range(0, len(rssFeed.entries[-1].title)):
+        links.append(rssFeed.entries[i].link)
 
-
-# Will remove tags for 480p and 720p RSS
-def removeTag(title):
-    # Will remove [Horrible Subs Tag]
-    editTitle1 = title[15:]
-    # Will remove file info
-    editTitle2 = editTitle1[:-16]
-    return editTitle2
+    return links
 
 
-removeTag(urls[0])
-
-# Might change a to i and do something with limiting it to length of
-#  animeWatcihng Variable idk
-a = 0
+def categorizeLinks(rssFeed, title, links):
+    """Categorizes just title and remove [HorribleSubs tags]"""
+    print('lol')
 
 
-for i in range(0, len(urls)):
-    if animeWatching[a] in urls[i]:
-        magnetLinks.append(urls[i + 1])
-        if not a >= len(animeWatching):
-            i += 1
+shows = removeTags(d)
+links = findLinks(d)
 
-print(magnetLinks[0].encode('utf-8'))
+print(shows)
+print(links)
 
 
-"""
-#IT WENT TO THE WRONG TORRENT BUT OK
-# WTF IS COP CRAFT EVEN
-# (probs because there isn't arifureta in it anymore so it breaks rip)
-# (will add test to check if nothing is in it doesnt do anything)
-"""
-magnetTotor = "ih2torrent --file ahahaha.torrent {}".format(magnetLinks[0])
-os.system(magnetTotor)
+# magnetTotor = "ih2torrent --file ahahaha.torrent {}".format(magnetLinks[0])
+# os.system(magnetTotor)

@@ -1,0 +1,8 @@
+
+* Bugs 
+** TODO Redo parsing (bugged)
+  
+* Features
+** TODO Ability to add new show
+** TODO Interact with notification daemon
+** TODO Auto add to torrent client
