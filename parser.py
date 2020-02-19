@@ -1,13 +1,11 @@
 # A parser for horriblesubs.info and other torrent magnet link based rss feeds
 
-import os
 import feedparser
 
 horriblesubsrss720 = "http://www.horriblesubs.info/rss.php?res=720"
 
 # List for anime currently watching, might change to a dic
 animeWatching = ['[HorribleSubs] Boku no Hero Academia - 81 [720p].mkv']
-
 
 magnetLinks = []
 
@@ -26,9 +24,8 @@ def removeTags(rssFeed):
     for i in range(0, len(shows)):
         # 15 is magic number for splitting HS tags
         # print(shows[i]) prints original
-        # print(shows[i][0:15]) prints without HS tag
-        shows[i] = shows[i][15:-4]  # prints without .mkv at end
-        # print(shows[i]) prints edited
+        shows[i] = shows[i][15:-1]  # prints without HS tag
+        shows[i] = shows[i][0:-9]  # prints without .mkv at end
 
     return shows
 
@@ -43,17 +40,39 @@ def findLinks(rssFeed):
     return links
 
 
-def categorizeLinks(rssFeed, title, links):
+def categorizeLinks(rssFeed, shows, links):
     """Categorizes just title and remove [HorribleSubs tags]"""
-    print('lol')
+    nonameAnime = []
+    ballerAnime = []
+    for i in range(0, len(rssFeed.entries[-1].title)):
+        if animeWatching[0] in rssFeed.entries[i].title:
+            ballerAnime.append(rssFeed.entries[i].title)
+            ballerAnime.append(rssFeed.entries[i].link)
+        else:
+            nonameAnime.append(rssFeed.entries[i].title)
+    # print(ballerAnime)
+    return ballerAnime
 
 
 shows = removeTags(d)
 links = findLinks(d)
 
-print(shows)
-print(links)
+
+bababoey = categorizeLinks(d, shows, links)
+
+for i in range(0, len(bababoey)):
+    if i % 2:
+        print(bababoey[i])
+    else:
+        None
 
 
-# magnetTotor = "ih2torrent --file ahahaha.torrent {}".format(magnetLinks[0])
-# os.system(magnetTotor)
+def reformatBababoey(lol):
+    """Reformat into finalised list"""
+    for i in range(0, len(lol)):
+        if i % 2:
+            None
+        else:
+            lol[i].replace(lol[i], shows[i])
+            print(lol[i])
+    return lol

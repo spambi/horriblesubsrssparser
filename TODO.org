@@ -1,7 +1,7 @@
-
 * Bugs 
-** TODO Redo parsing (bugged)
-  
+** DONE Redo parsing (bugged)
+   - Completely refactored code.
+   - Program now returns Shows name with magnet link in adjacent position in list
 * Features
 ** TODO Ability to add new show
 ** TODO Interact with notification daemon
