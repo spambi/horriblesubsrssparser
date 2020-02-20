@@ -5,7 +5,7 @@
 * Features
 ** TODO Ability to add new show
 ** TODO Interact with notification daemon
-** TODO Auto add to torrent client
+** TODO Add to transmission
 ** TODO Have inter actable menu to choose which shows at what quality you want from it
 ** TODO Choose what torrent daemon you use
 

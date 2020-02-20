@@ -54,19 +54,6 @@ def categorizeLinks(rssFeed, shows, links):
     return ballerAnime
 
 
-shows = removeTags(d)
-links = findLinks(d)
-
-
-bababoey = categorizeLinks(d, shows, links)
-
-for i in range(0, len(bababoey)):
-    if i % 2:
-        print(bababoey[i])
-    else:
-        None
-
-
 def reformatBababoey(lol):
     """Reformat into finalised list"""
     for i in range(0, len(lol)):
@@ -76,3 +63,17 @@ def reformatBababoey(lol):
             lol[i].replace(lol[i], shows[i])
             print(lol[i])
     return lol
+
+
+shows = removeTags(d)
+links = findLinks(d)
+
+
+bababoey = categorizeLinks(d, shows, links)
+
+for i in range(0, len(bababoey)):
+    if i % 2:
+        print(bababoey[i-1])
+        print(bababoey[i])
+    else:
+        None
