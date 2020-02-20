@@ -1,7 +1,4 @@
-* Point of this
-    For automatic downloading of magnet links from horriblesubs.info automatically
-* WIP
-* TODO
-    - Auto downwload through transmission
-    - Sort through users specifications 
+* Focus
+Cli tool written in python to auto download horriblesubs anime via their rssfeed and only transmission atm.
+  
     
