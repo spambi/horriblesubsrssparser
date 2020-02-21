@@ -4,12 +4,14 @@
 import feedparser
 import transmissionrpc
 
+tc = transmissionrpc.Client('localhost', port=9091)
 horriblesubsrss720 = "http://www.horriblesubs.info/rss.php?res=720"
 
 # List for anime currently watching, might change to a dic
 animeWatching = ['[HorribleSubs] Mairimashita! Iruma-kun - 20 [720p].mkv',
                  '[HorribleSubs] Boku no Hero Academia - 81 [720p].mkv',
-                 '[HorribleSubs] Somali to Mori no Kamisama - 07 [720p].mkv']
+                 '[HorribleSubs] Somali to Mori no Kamisama - 07 [720p].mkv',
+                 '[HorribleSubs] Radiant S2 - 20 [720p].mkv']
 
 magnetLinks = []
 
@@ -105,6 +107,17 @@ links = findLinks(d)
 bababoey = categorizeLinks(d, shows, links)
 reformatBababoey(bababoey)
 
-#tc = transmissionrpc.Client('localhost', port=9091)
+
+def addTorrents(mainList, trans):
+    for i in range(0, len(mainList)):
+        if i % 2:
+            print(mainList[i])
+            trans.add_torrent(mainList[i])
+        else:
+            pass
+
+
+addTorrents(bababoey, tc)
+
 #tc.get_torrents()
 #tc.add_torrent(bababoey[0])
