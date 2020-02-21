@@ -1,11 +1,15 @@
+
 # A parser for horriblesubs.info and other torrent magnet link based rss feeds
 
 import feedparser
+import transmissionrpc
 
 horriblesubsrss720 = "http://www.horriblesubs.info/rss.php?res=720"
 
 # List for anime currently watching, might change to a dic
-animeWatching = ['[HorribleSubs] Boku no Hero Academia - 81 [720p].mkv']
+animeWatching = ['[HorribleSubs] Mairimashita! Iruma-kun - 20 [720p].mkv',
+                 '[HorribleSubs] Boku no Hero Academia - 81 [720p].mkv',
+                 '[HorribleSubs] Somali to Mori no Kamisama - 07 [720p].mkv']
 
 magnetLinks = []
 
@@ -20,7 +24,7 @@ def removeTags(rssFeed):
     try:
         for i in range(0, len(d['entries'])):
             shows.append(rssFeed.entries[i].title)
-            #print(rssFeed.entries[i].title_detail)
+
     except IndexError:
         print('Ended')
         pass
@@ -45,22 +49,43 @@ def findLinks(rssFeed):
     return links
 
 
-def categorizeLinks(rssFeed, shows, links):
-    """Categorizes just title and remove [HorribleSubs tags]"""
-    nonameAnime = []
-    ballerAnime = []
-    for i in range(0, len(rssFeed['entries'])):
+#def categorizeLinks(rssFeed, shows, links):
+#    """Categorizes just title and remove [HorribleSubs tags]"""
+#    nonameAnime = []
+#    ballerAnime = []
+#    for i in range(0, len(rssFeed['entries'])):
+#        try:
+#            if animeWatching[i]:
+#                ballerAnime.append(rssFeed.entries[i].title)
+#                ballerAnime.append(rssFeed.entries[i].link)
+#            else:
+#                nonameAnime.append(rssFeed.entries[i].title)
+#        except IndexError:
+#            pass
+#    return ballerAnime
+
+def categorizeLinks(feed, shows, links):
+    anime = []
+
+    # Make main loop that iterates through all entries
+    for i in range(0, len(feed['entries'])):
+        # For exception handling
         try:
-            if animeWatching[0] in rssFeed.entries[i].title:
-                ballerAnime.append(rssFeed.entries[i].title)
-                ballerAnime.append(rssFeed.entries[i].link)
-            else:
-                nonameAnime.append(rssFeed.entries[i].title)
+            # Nested loop to iterate through animeWatching len
+            # This loop will only iterate through itself 3 times
+            for x in range(0, len(animeWatching)):
+                # Check if anime is in feed entries
+                if animeWatching[x] in feed.entries[i].title:
+                    #print('lol yesAHAHAHAHA')
+                    # Will append title and link to list that is returned through func
+                    anime.append(feed.entries[i].title)
+                    anime.append(feed.entries[i].link)
+                else:
+                    pass
+        # Exception handling
         except IndexError:
-            print('Ended')
             pass
-    # print(ballerAnime)
-    return ballerAnime
+    return anime
 
 
 def reformatBababoey(lol):
@@ -70,7 +95,6 @@ def reformatBababoey(lol):
             None
         else:
             lol[i].replace(lol[i], shows[i])
-            print(lol[i])
     return lol
 
 
@@ -79,14 +103,8 @@ links = findLinks(d)
 
 
 bababoey = categorizeLinks(d, shows, links)
-
-for i in range(0, len(bababoey)):
-    if i % 2:
-        print(bababoey[i-1])
-        print(bababoey[i])
-
-        None
+reformatBababoey(bababoey)
 
 #tc = transmissionrpc.Client('localhost', port=9091)
 #tc.get_torrents()
-#tc.add_torrent(bababoey[1])
+#tc.add_torrent(bababoey[0])
