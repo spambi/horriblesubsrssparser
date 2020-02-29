@@ -1,4 +1,4 @@
-
+# ready
 # A parser for horriblesubs.info and other torrent magnet link based rss feeds
 
 import feedparser
@@ -6,6 +6,9 @@ import transmissionrpc
 
 tc = transmissionrpc.Client('localhost', port=9091)
 horriblesubsrss720 = "http://www.horriblesubs.info/rss.php?res=720"
+
+animeWatchingName = ['Boku no Hero Academia',
+                     'Somali to Mori no Kamisama']
 
 # List for anime currently watching, might change to a dic
 animeWatching = ['[HorribleSubs] Mairimashita! Iruma-kun - 20 [720p].mkv',
@@ -75,9 +78,9 @@ def categorizeLinks(feed, shows, links):
         try:
             # Nested loop to iterate through animeWatching len
             # This loop will only iterate through itself 3 times
-            for x in range(0, len(animeWatching)):
-                # Check if anime is in feed entries
-                if animeWatching[x] in feed.entries[i].title:
+            for x in range(0, len(animeWatchingName)):
+                # Check if anime name is in feed entries
+                if animeWatchingName[x] in feed.entries[i].title:
                     #print('lol yesAHAHAHAHA')
                     # Will append title and link to list that is returned through func
                     anime.append(feed.entries[i].title)

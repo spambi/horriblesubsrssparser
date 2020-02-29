@@ -2,10 +2,11 @@
 ** DONE Redo parsing (bugged)
    - Completely refactored code.
    - Program now returns Shows name with magnet link in adjacent position in list
+** DONE Fix only adding singular episode number
 * Features
 ** TODO Ability to add new show
 ** TODO Interact with notification daemon
-** TODO Add to transmission
+** DONE Add to transmission
 ** TODO Have inter actable menu to choose which shows at what quality you want from it
 ** TODO Choose what torrent daemon you use
 
