@@ -5,8 +5,12 @@
 ** DONE Fix only adding singular episode number
 * Features
 ** TODO Ability to add new show
-** TODO Interact with notification daemon
+   - Maybe ncurses or wxPython menu
+** +TODO Interact with notification daemon+
+   - transmissionrpc will auto notify
 ** DONE Add to transmission
 ** TODO Have inter actable menu to choose which shows at what quality you want from it
 ** TODO Choose what torrent daemon you use
+* Misc.
+** DONE Clean up code
 
