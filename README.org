@@ -2,3 +2,12 @@
 Cli tool written in python to auto download horriblesubs anime via their rssfeed and only transmission atm.
   
     
+* How to use
+  1) If in countries that blocks torrent sites, change DNS proxy
+  2) Install [[https://transmissionbt.com/download/][transmission]] and enable [[https://github.com/y-polek/TransmissionRemote/wiki/How-to-configure-Transmission-Remote][remote access]].
+  3) ATM you have to manually change/add animeWatchingName list to update shows to watch
+* Notes
+  * Only supports 480p/720p ATM
+  * Only supports transmission
+  * I don't support illegally downloading content, this is for personal education purposes
+  * Make sure to save all illegally downloaded content incase Corona Virus kills all normie and Crunchy Roll shuts down
