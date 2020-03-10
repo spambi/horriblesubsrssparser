@@ -1,10 +1,12 @@
+#+TODO: TODO(t) DOING(s) | DONE(d) CANCELED(c)
+
 * Bugs 
 ** DONE Redo parsing (bugged)
    - Completely refactored code.
    - Program now returns Shows name with magnet link in adjacent position in list
 ** DONE Fix only adding singular episode number
 * Features
-** TODO Ability to add new show
+** DOING Ability to add new show
    - Maybe ncurses or wxPython menu
 ** +TODO Interact with notification daemon+
    - transmissionrpc will auto notify

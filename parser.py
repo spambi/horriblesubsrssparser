@@ -2,8 +2,10 @@
 
 import feedparser
 import transmissionrpc
+import getopt
 
 tc = transmissionrpc.Client('localhost', port=9091)
+
 horriblesubsrss720 = "http://www.horriblesubs.info/rss.php?res=720"
 
 animeWatchingName = ['Boku no Hero Academia',
