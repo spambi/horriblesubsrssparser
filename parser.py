@@ -1,17 +1,37 @@
 # A parser for horriblesubs.info and other torrent magnet link based rss feeds
 
+import argparse
+import csv
 import feedparser
 import transmissionrpc
-import getopt
 
 tc = transmissionrpc.Client('localhost', port=9091)
 horriblesubsrss720 = "http://www.horriblesubs.info/rss.php?res=720"
 
-animeWatchingName = ['Boku no Hero Academia',
-                     'Somali to Mori no Kamisama',
-                     'Ishuzoku Reviewers']
+animeWatchingName = []
+
 
 d = feedparser.parse(horriblesubsrss720)
+
+# Parser
+parser = argparse.ArgumentParser()
+parser.add_argument('-a', '--add-ani', type=str, help='Adds an anime from the csv config file')
+parser.add_argument('-d', '--del-ani', type=str, help='Deletes an anime from the csv config file')
+args = parser.parse_args()
+print(args)
+
+# Read config and write to animeWatchingList
+with open('conf.csv', newline='') as csvfile:
+    confReader = csv.reader(csvfile, delimiter=',', quotechar="|")
+    for row in confReader:
+        animeWatchingName.append(row)
+
+
+# Writes new anime to csv file
+def addAnime(aniName, csvFile):
+    with open(csvFile, 'wb') as csvfuck:
+        writer = csv.writer(csvfuck, delimiter=' ')
+        writer.writerow([bytes(aniName)])
 
 
 def removeTags(rssFeed):
@@ -58,7 +78,8 @@ def categorizeLinks(feed, shows, links):
             # This loop will only iterate through itself 3 times
             for x in range(0, len(animeWatchingName)):
                 # Check if anime name is in feed entries
-                if animeWatchingName[x] in feed.entries[i].title:
+                # Had to fuck with nested lists cause fuck csv
+                if animeWatchingName[x][0] in feed.entries[i].title:
                     """ Will append title and link to list that is returned
                     through func """
                     anime.append(feed.entries[i].title)
@@ -87,10 +108,12 @@ bababoey = categorizeLinks(d, removeTags(d), findLinks(d))
 def addTorrents(mainList, trans):
     for i in range(0, len(mainList)):
         if i % 2:
-            print(mainList[i])
+            #print(mainList[i])
             trans.add_torrent(mainList[i])
         else:
             pass
 
+
+addAnime(args.add_ani, 'conf.csv')
 
 addTorrents(categorizeLinks(d, removeTags(d), findLinks(d)), tc)
