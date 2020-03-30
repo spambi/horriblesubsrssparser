@@ -4,6 +4,7 @@ import configparser
 import feedparser
 import sys
 import transmissionrpc
+import getopt
 
 animeWatchingName = []
 tc = transmissionrpc.Client('localhost', port=9091)
