@@ -4,13 +4,13 @@
    - Program now returns Shows name with magnet link in adjacent position in list
 ** DONE Fix only adding singular episode number
 * Features
-** TODO Ability to add new show
-   - Maybe ncurses or wxPython menu
-** +TODO Interact with notification daemon+
-   - transmissionrpc will auto notify
+** DONE Ability to add new show
+   - Use argparser and config parser to accomplish
+** TODO Interact with notification daemon+
+   - transmissionrpc will auto notify client about added shows
 ** DONE Add to transmission
 ** TODO Have inter actable menu to choose which shows at what quality you want from it
 ** TODO Choose what torrent daemon you use
-* Misc.
+* Misc.  
 ** DONE Clean up code
 
