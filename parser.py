@@ -1,37 +1,75 @@
 # A parser for horriblesubs.info and other torrent magnet link based rss feeds
-
 import argparse
-import csv
+import configparser
 import feedparser
+import sys
 import transmissionrpc
 
-tc = transmissionrpc.Client('localhost', port=9091)
-horriblesubsrss720 = "http://www.horriblesubs.info/rss.php?res=720"
-
 animeWatchingName = []
+tc = transmissionrpc.Client('localhost', port=9091)
 
-
-d = feedparser.parse(horriblesubsrss720)
-
+p = configparser.ConfigParser()
 # Parser
 parser = argparse.ArgumentParser()
-parser.add_argument('-a', '--add-ani', type=str, help='Adds an anime from the csv config file')
-parser.add_argument('-d', '--del-ani', type=str, help='Deletes an anime from the csv config file')
+# Access through args.add
+parser.add_argument('-a', '--add', type=str,
+                    help='Adds an anime from the csv config file. (Only works\
+                        with singular anime ATM)')
+# Access through args.delete
+parser.add_argument('-d', '--delete', type=str,
+                    help='Deletes an anime from the csv config file. (Only works\
+                         with with singular anime ATM')
 args = parser.parse_args()
-print(args)
-
-# Read config and write to animeWatchingList
-with open('conf.csv', newline='') as csvfile:
-    confReader = csv.reader(csvfile, delimiter=',', quotechar="|")
-    for row in confReader:
-        animeWatchingName.append(row)
 
 
-# Writes new anime to csv file
-def addAnime(aniName, csvFile):
-    with open(csvFile, 'wb') as csvfuck:
-        writer = csv.writer(csvfuck, delimiter=' ')
-        writer.writerow([bytes(aniName)])
+# Writes new anime to parser.ini
+def addAnime(aniName, configFile):
+    # Reading from file
+    with open(configFile, "r") as curFile:
+        try:
+            p.read_file(curFile)
+        except configparser.DuplicateSectionError as err:
+            print(err)
+            return False
+
+    # Writing to file
+    with open(configFile, "w") as curFile:
+        # Add the anime name if it doens't pass
+        p.add_section(aniName)
+        try:
+            p.write(curFile)
+            print("[+] Wrote to %s" % aniName)
+            return True
+        except configparser.DuplicateSectionError as err:
+            print(err)
+            return False
+
+
+# Deletes anime in parser.ini
+def deleteAnime(aniName, configFile):
+    temp = []
+    sectionName = []
+    # Read file to check if aniName is in parser.ini
+    with open(configFile, "r") as curFile:
+        p.read_file(curFile)
+        temp = p.sections()
+        # Iterate through read sections and check if they match aniName
+        for i in range(len(temp)):
+            if temp[i] in aniName:
+                # Append the duplicate to tempArray
+                sectionName.append(temp[i])
+        # Check if there was no duplicates, then return False
+        if len(sectionName) == 0:
+            print("[-] No Section with that title")
+            return False
+
+    # Now delete duplicated section
+    with open(configFile, "w") as curFile:
+        p.remove_section(sectionName[0])
+        p.write(curFile)
+        # Use sectionName[0] to be accuracte
+        print("[+]Removed: {0} from {1}".format(sectionName[0], configFile))
+        return True
 
 
 def removeTags(rssFeed):
@@ -47,7 +85,7 @@ def removeTags(rssFeed):
         print(err.args)
         pass
 
-    # Removes HS tags
+    # Splits HS Tags from shows
     for i in range(0, len(shows)):
         # 15 is magic number for splitting HS tags
         # print(shows[i]) prints original
@@ -79,11 +117,12 @@ def categorizeLinks(feed, shows, links):
             for x in range(0, len(animeWatchingName)):
                 # Check if anime name is in feed entries
                 # Had to fuck with nested lists cause fuck csv
-                if animeWatchingName[x][0] in feed.entries[i].title:
+                if animeWatchingName[0][x] in feed.entries[i].title:
                     """ Will append title and link to list that is returned
                     through func """
                     anime.append(feed.entries[i].title)
                     anime.append(feed.entries[i].link)
+                    print(anime)
                 else:
                     pass
         # Exception handling
@@ -102,18 +141,45 @@ def reformatBababoey(lol):
     return lol
 
 
-bababoey = categorizeLinks(d, removeTags(d), findLinks(d))
-
-
 def addTorrents(mainList, trans):
+    """Will add a list of magnetLinks to transmission"""
     for i in range(0, len(mainList)):
         if i % 2:
-            #print(mainList[i])
+            print(len(mainList))
             trans.add_torrent(mainList[i])
         else:
             pass
 
 
-addAnime(args.add_ani, 'conf.csv')
+if args.add:
+    if addAnime(args.add, 'parser.ini'):
+        print("[+] Successfully added %s!" % args.add)
+        sys.exit()
+    else:
+        print("[-] Something went wrong")
+        sys.exit()
+else:
+    pass
+
+
+if args.delete:
+    if deleteAnime(args.delete, "parser.ini"):
+        sys.exit()
+    else:
+        sys.exit()
+else:
+    pass
+
+# bababoey = categorizeLinks(d, removeTags(d), findLinks(d))  # Is used in
+# extended form in addTorrents
+
+
+horriblesubsrss720 = "http://www.horriblesubs.info/rss.php?res=720"
+d = feedparser.parse(horriblesubsrss720)
+
+with open("parser.ini", "r") as f:
+    p.read_file(f)
+    animeWatchingName.append(p.sections())
+    print(animeWatchingName)
 
 addTorrents(categorizeLinks(d, removeTags(d), findLinks(d)), tc)
