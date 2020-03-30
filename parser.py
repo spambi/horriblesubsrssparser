@@ -117,12 +117,11 @@ def categorizeLinks(feed, shows, links):
             for x in range(0, len(animeWatchingName)):
                 # Check if anime name is in feed entries
                 # Had to fuck with nested lists cause fuck csv
-                if animeWatchingName[0][x] in feed.entries[i].title:
+                if animeWatchingName[x] in feed.entries[i].title:
                     """ Will append title and link to list that is returned
                     through func """
                     anime.append(feed.entries[i].title)
                     anime.append(feed.entries[i].link)
-                    print(anime)
                 else:
                     pass
         # Exception handling
@@ -171,7 +170,7 @@ else:
     pass
 
 # bababoey = categorizeLinks(d, removeTags(d), findLinks(d))  # Is used in
-# extended form in addTorrents
+# simplified form for addTorents
 
 
 horriblesubsrss720 = "http://www.horriblesubs.info/rss.php?res=720"
@@ -179,7 +178,9 @@ d = feedparser.parse(horriblesubsrss720)
 
 with open("parser.ini", "r") as f:
     p.read_file(f)
-    animeWatchingName.append(p.sections())
+    for i in range(0, len(p.sections())):
+        # Formats sections into singular lists
+        animeWatchingName.append(p.sections()[i])
     print(animeWatchingName)
 
 addTorrents(categorizeLinks(d, removeTags(d), findLinks(d)), tc)
